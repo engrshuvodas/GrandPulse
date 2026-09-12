@@ -14,8 +14,8 @@ router = APIRouter(prefix="/api/export", tags=["Export & Reports"])
 @router.get("/excel")
 def export_excel(db: Session = Depends(get_db)):
     """
-    Export full GrandPulse 16-Week Gantt Schedule, Milestones, Major Modules,
-    and Member Contributions to a styled Excel (.xlsx) workbook using openpyxl.
+    Export full RaktSeva Blood Bank System 16-Week Gantt Schedule, Milestones, Major Modules,
+    Member Leaderboard, and Contribution Ledger to a styled Excel (.xlsx) workbook using openpyxl.
     """
     members = db.query(Member).all()
     contributions = db.query(Contribution).all()
@@ -126,11 +126,11 @@ def export_excel(db: Session = Depends(get_db)):
         summary_data=summary_data
     )
 
-    filename = f"GrandPulse_Hostel_Gantt_Report_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}.xlsx"
+    filename = f"RaktSeva_BloodBank_SPM_GanttReport_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}.xlsx"
     return StreamingResponse(
         excel_stream,
         media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        headers={"Content-Disposition": f"attachment; filename={filename}"}
+        headers={"Content-Disposition": f"attachment; filename=\"{ filename }\""}
     )
 
 @router.get("/csv")

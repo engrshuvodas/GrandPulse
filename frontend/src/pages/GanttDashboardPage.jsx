@@ -33,14 +33,14 @@ export default function GanttDashboardPage() {
                 16-Week SPM Project
               </span>
               <span className="text-xs text-on-surface-variant font-mono">
-                Week 6 of 16 Active
+                Week 13 of 16 — Testing &amp; Deployment Phase
               </span>
             </div>
             <h1 className="font-headline-md text-headline-md font-bold text-on-surface">
-              Hostel Management System — Gantt & Grand Chart
+              RaktSeva Blood Bank System — Gantt &amp; Grand Chart
             </h1>
             <p className="text-xs text-on-surface-variant max-w-2xl mt-1">
-              Interactive Gantt chart, milestone gates, and contributor points directly modeled from the official Software Project Management specification.
+              Interactive 16-week Gantt chart, milestone gates, and contributor velocity points for the Parul Sevashram Hospital Blood Bank SPM project.
             </p>
           </div>
 
@@ -62,7 +62,7 @@ export default function GanttDashboardPage() {
             <div className="text-xl font-mono font-black text-on-surface mt-0.5">
               16 Weeks
             </div>
-            <span className="text-[10px] text-primary font-bold">Week 6 In Progress</span>
+            <span className="text-[10px] text-primary font-bold">Week 13 — Testing Phase</span>
           </div>
 
           <div className="bg-surface-container-lowest/80 rounded-xl p-space-md border border-surface-container-highest/40">
@@ -80,7 +80,7 @@ export default function GanttDashboardPage() {
             <div className="text-xl font-mono font-black text-on-surface mt-0.5">
               {summary.milestones_met} / {summary.total_milestones}
             </div>
-            <span className="text-[10px] text-indigo-400 font-bold">W2 & W5 Approved</span>
+            <span className="text-[10px] text-indigo-400 font-bold">W2, W5, W9, W12 ✓ Approved</span>
           </div>
 
           <div className="bg-surface-container-lowest/80 rounded-xl p-space-md border border-surface-container-highest/40">
@@ -88,7 +88,7 @@ export default function GanttDashboardPage() {
             <div className="text-xl font-mono font-black text-primary mt-0.5">
               {summary.sprint_velocity || '94.8%'}
             </div>
-            <span className="text-[10px] text-emerald-400 font-bold">On Schedule</span>
+            <span className="text-[10px] text-emerald-400 font-bold">On Schedule ✓</span>
           </div>
         </div>
       </div>
