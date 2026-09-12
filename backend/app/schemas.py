@@ -1,5 +1,5 @@
 from typing import Optional, List
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 
 # Auth Schemas
 class Token(BaseModel):
@@ -16,10 +16,11 @@ class UserLogin(BaseModel):
 
 class UserRegister(BaseModel):
     username: str
-    email: EmailStr
+    email: str
     password: str
     role: Optional[str] = "Engineer"
     member_id: Optional[str] = None
+
 
 class UserResponse(BaseModel):
     id: int
@@ -28,8 +29,7 @@ class UserResponse(BaseModel):
     role: str
     member_id: Optional[str] = None
 
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
 
 # Member Schemas
 class MemberBase(BaseModel):
@@ -59,8 +59,7 @@ class MemberResponse(MemberBase):
     rank: Optional[int] = 1
     percentage: Optional[float] = 0.0
 
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
 
 # Task Schemas
 class TaskBase(BaseModel):
@@ -92,8 +91,7 @@ class TaskResponse(TaskBase):
     time_label: Optional[str] = "Active"
     assignee: Optional[MemberBase] = None
 
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
 
 # Contribution Schemas
 class ContributionBase(BaseModel):
@@ -115,8 +113,7 @@ class ContributionResponse(ContributionBase):
     time_label: Optional[str] = "Just now"
     member: Optional[MemberBase] = None
 
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
 
 # Summary & Metrics Schemas
 class SummaryMetrics(BaseModel):
