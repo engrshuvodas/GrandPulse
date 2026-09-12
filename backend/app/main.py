@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
 from app.database import engine, Base, SessionLocal, active_dialect
+from app import models
 from app.seed_data import seed_database
 from app.routers import auth, members, tasks, contributions, analytics, export, gantt
 
