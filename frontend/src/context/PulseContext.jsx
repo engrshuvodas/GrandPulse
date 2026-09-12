@@ -14,23 +14,23 @@ export function PulseProvider({ children }) {
   const [modules, setModules] = useState([]);
   const [contributions, setContributions] = useState([]);
   const [summary, setSummary] = useState({
-    project_name: 'Hostel Management System',
+    project_name: 'RaktSeva Blood Bank System',
     project_duration: '16 Weeks',
-    active_week: 6,
+    active_week: 13,
     total_tasks: 17,
-    completed_tasks: 12,
-    inprogress_tasks: 3,
+    completed_tasks: 13,
+    inprogress_tasks: 2,
     pending_tasks: 2,
     total_modules: 10,
-    completed_modules: 6,
-    milestones_met: 3,
+    completed_modules: 8,
+    milestones_met: 4,
     total_milestones: 7,
     sprint_velocity: '94.8%',
-    overall_progress_pct: 83,
+    overall_progress_pct: 82,
     active_members: 3,
-    total_logs: 12,
-    total_hours: 95.0,
-    total_points: 85,
+    total_logs: 36,
+    total_hours: 154.5,
+    total_points: 170,
   });
   const [loading, setLoading] = useState(true);
 

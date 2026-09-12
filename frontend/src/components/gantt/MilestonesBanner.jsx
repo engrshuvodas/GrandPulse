@@ -16,7 +16,7 @@ export default function MilestonesBanner() {
               Project Milestones Roadmap (16 Weeks)
             </h3>
             <p className="text-xs text-on-surface-variant">
-              Key delivery gates defined in Hostel Management System SPM specification
+              Key delivery gates defined in RaktSeva Blood Bank Management System SPM specification
             </p>
           </div>
         </div>

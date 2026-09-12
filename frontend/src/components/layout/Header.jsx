@@ -16,7 +16,7 @@ export default function Header() {
       {/* Left Area: Project Breadcrumb */}
       <div className="flex items-center gap-space-lg">
         <div className="flex items-center gap-space-xs font-title-sm text-title-sm">
-          <span className="text-primary font-bold">Hostel Management System</span>
+          <span className="text-primary font-bold">RaktSeva Blood Bank System</span>
           <span className="text-outline">/</span>
           <span className="text-on-surface-variant font-medium">16-Week Gantt Schedule</span>
         </div>
@@ -29,7 +29,7 @@ export default function Header() {
           <span className="material-symbols-outlined text-[16px] text-primary">
             calendar_today
           </span>
-          <span className="font-semibold text-xs">Active: Week 6 of 16</span>
+          <span className="font-semibold text-xs">Active: Week 13 of 16</span>
         </div>
 
         {/* Action Buttons */}

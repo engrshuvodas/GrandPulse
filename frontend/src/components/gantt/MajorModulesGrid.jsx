@@ -26,10 +26,10 @@ export default function MajorModulesGrid() {
           </div>
           <div>
             <h3 className="font-title-md text-title-md font-bold text-on-surface">
-              Major Modules of Hostel Management System (10 Modules)
+              Major Modules of RaktSeva Blood Bank System (10 Modules)
             </h3>
             <p className="text-xs text-on-surface-variant">
-              Full core module inventory specified in PDF Page 3 with active architecture leads
+              Full core module inventory specified in SRS Page 3 with active architecture leads
             </p>
           </div>
         </div>

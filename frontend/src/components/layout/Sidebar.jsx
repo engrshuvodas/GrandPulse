@@ -26,7 +26,7 @@ export default function Sidebar() {
               GrandPulse
             </span>
             <span className="font-label-sm text-[10px] text-primary tracking-wider uppercase mt-1 font-semibold">
-              Hostel Management SPM
+              RaktSeva Blood Bank SPM
             </span>
           </div>
         </div>

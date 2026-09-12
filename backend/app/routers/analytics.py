@@ -31,9 +31,9 @@ def get_summary_metrics(db: Session = Depends(get_db)):
     overall_progress = (sum(t.progress_pct for t in all_tasks) // total_tasks) if total_tasks > 0 else 0
 
     return SummaryMetrics(
-        project_name="Hostel Management System",
+        project_name="RaktSeva Blood Bank System",
         project_duration="16 Weeks",
-        active_week=6,
+        active_week=13,
         total_tasks=total_tasks,
         completed_tasks=completed_tasks,
         inprogress_tasks=inprogress_tasks,
