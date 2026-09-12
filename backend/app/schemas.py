@@ -21,7 +21,6 @@ class UserRegister(BaseModel):
     role: Optional[str] = "Engineer"
     member_id: Optional[str] = None
 
-
 class UserResponse(BaseModel):
     id: int
     username: str
@@ -50,6 +49,16 @@ class MemberBase(BaseModel):
 class MemberCreate(MemberBase):
     pass
 
+class MemberUpdate(BaseModel):
+    name: Optional[str] = None
+    role: Optional[str] = None
+    email: Optional[str] = None
+    tech_stack: Optional[str] = None
+    avatar_url: Optional[str] = None
+    avatar_initial: Optional[str] = None
+    active_lead: Optional[bool] = None
+    accent_color: Optional[str] = None
+
 class MemberResponse(MemberBase):
     score: Optional[int] = 0
     hours: Optional[float] = 0.0
@@ -61,35 +70,61 @@ class MemberResponse(MemberBase):
 
     model_config = {"from_attributes": True}
 
-# Task Schemas
-class TaskBase(BaseModel):
+# Gantt Task Schemas (Directly from User PDF)
+class GanttTaskBase(BaseModel):
     title: str
-    description: Optional[str] = None
-    assignee_id: Optional[str] = None
+    phase: Optional[str] = "Development"
+    start_week: int
+    end_week: int
+    duration_weeks: int
+    progress_pct: Optional[int] = 0
     status: Optional[str] = "Pending"
     priority: Optional[str] = "Medium"
     points: Optional[int] = 3
-    estimated_hours: Optional[float] = 4.0
+    assignee_id: Optional[str] = None
+    module_id: Optional[int] = None
+    color: Optional[str] = "#6366f1"
 
-class TaskCreate(TaskBase):
+class GanttTaskCreate(GanttTaskBase):
     id: Optional[str] = None
 
-class TaskUpdate(BaseModel):
-    title: Optional[str] = None
-    description: Optional[str] = None
-    assignee_id: Optional[str] = None
+class GanttTaskUpdate(BaseModel):
+    progress_pct: Optional[int] = None
     status: Optional[str] = None
-    priority: Optional[str] = None
-    points: Optional[int] = None
-    estimated_hours: Optional[float] = None
+    assignee_id: Optional[str] = None
+
+class GanttTaskResponse(GanttTaskBase):
+    id: str
+    assignee: Optional[MemberBase] = None
+
+    model_config = {"from_attributes": True}
+
+# Compatibility aliases
+TaskResponse = GanttTaskResponse
+TaskCreate = GanttTaskCreate
+TaskUpdate = GanttTaskUpdate
 
 class TaskStatusUpdate(BaseModel):
     status: str
 
-class TaskResponse(TaskBase):
-    id: str
-    time_label: Optional[str] = "Active"
-    assignee: Optional[MemberBase] = None
+# Milestone Schemas (PDF Page 3)
+class MilestoneResponse(BaseModel):
+    id: int
+    week: int
+    title: str
+    status: str
+    completed: bool
+
+    model_config = {"from_attributes": True}
+
+# Project Module Schemas (PDF Page 3: 10 Major Modules)
+class ProjectModuleResponse(BaseModel):
+    id: int
+    name: str
+    description: Optional[str] = None
+    status: str
+    completion_pct: int
+    lead_id: Optional[str] = None
 
     model_config = {"from_attributes": True}
 
@@ -115,27 +150,24 @@ class ContributionResponse(ContributionBase):
 
     model_config = {"from_attributes": True}
 
-# Summary & Metrics Schemas
+# Summary Metrics
 class SummaryMetrics(BaseModel):
-    active_members: int
+    project_name: Optional[str] = "Hostel Management System"
+    project_duration: Optional[str] = "16 Weeks"
+    active_week: Optional[int] = 6
     total_tasks: int
     completed_tasks: int
-    completed_ratio: float
     inprogress_tasks: int
-    pending_tasks: int
-    total_logs: int
-    total_hours: float
-    total_points: int
-    sprint_health: str
-    sprint_velocity: str
-
-class WeeklyVelocityItem(BaseModel):
-    week: str
-    points: int
-    hours: float
-
-class CategoryAttributionItem(BaseModel):
-    category: str
-    points: float
-    percentage: float
-    count: int
+    pending_tasks: Optional[int] = 0
+    total_modules: Optional[int] = 10
+    completed_modules: Optional[int] = 0
+    milestones_met: Optional[int] = 2
+    total_milestones: Optional[int] = 7
+    sprint_velocity: Optional[str] = "94.8%"
+    overall_progress_pct: Optional[int] = 35
+    active_members: Optional[int] = 3
+    total_logs: Optional[int] = 12
+    total_hours: Optional[float] = 95.0
+    total_points: Optional[int] = 85
+    sprint_health: Optional[str] = "+18.4%"
+    completed_ratio: Optional[float] = 35.0

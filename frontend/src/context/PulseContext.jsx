@@ -4,29 +4,38 @@ import { api } from '../api/client';
 const PulseContext = createContext(null);
 
 export function PulseProvider({ children }) {
-  // Navigation
-  const [activeTab, setActiveTab] = useState('dashboard');
+  // Navigation: 'gantt', 'grandchart', 'analytics', 'export'
+  const [activeTab, setActiveTab] = useState('gantt');
 
   // Core Data
   const [members, setMembers] = useState([]);
-  const [tasks, setTasks] = useState([]);
+  const [ganttTasks, setGanttTasks] = useState([]);
+  const [milestones, setMilestones] = useState([]);
+  const [modules, setModules] = useState([]);
   const [contributions, setContributions] = useState([]);
   const [summary, setSummary] = useState({
+    project_name: 'Hostel Management System',
+    project_duration: '16 Weeks',
+    active_week: 6,
+    total_tasks: 17,
+    completed_tasks: 12,
+    inprogress_tasks: 3,
+    pending_tasks: 2,
+    total_modules: 10,
+    completed_modules: 6,
+    milestones_met: 3,
+    total_milestones: 7,
+    sprint_velocity: '94.8%',
+    overall_progress_pct: 83,
     active_members: 3,
-    total_tasks: 24,
-    completed_tasks: 15,
-    completed_ratio: 62.5,
-    inprogress_tasks: 6,
-    pending_tasks: 3,
-    total_logs: 22,
-    total_hours: 168.5,
-    total_points: 148,
-    sprint_health: '+18.4%',
-    sprint_velocity: '62.5%',
+    total_logs: 12,
+    total_hours: 95.0,
+    total_points: 85,
   });
   const [loading, setLoading] = useState(true);
 
   // Filters
+  const [activePhase, setActivePhase] = useState('ALL'); // ALL, Planning, Design, Development, Testing, Deployment
   const [activeCategory, setActiveCategory] = useState('ALL');
   const [activeSort, setActiveSort] = useState('score');
   const [activeTimeframe, setActiveTimeframe] = useState('all');
@@ -61,14 +70,18 @@ export function PulseProvider({ children }) {
   // Fetch all state
   const refreshData = useCallback(async () => {
     try {
-      const [membersData, tasksData, contribsData, summaryData] = await Promise.all([
+      const [membersData, ganttData, milestonesData, modulesData, contribsData, summaryData] = await Promise.all([
         api.getMembers(activeCategory, activeSort),
-        api.getTasks(),
+        api.getGanttTasks(activePhase),
+        api.getMilestones(),
+        api.getProjectModules(),
         api.getContributions(),
-        api.getSummaryAnalytics(),
+        api.getGanttSummary().catch(() => api.getSummaryAnalytics()),
       ]);
       setMembers(membersData || []);
-      setTasks(tasksData || []);
+      setGanttTasks(ganttData || []);
+      setMilestones(milestonesData || []);
+      setModules(modulesData || []);
       setContributions(contribsData || []);
       if (summaryData) setSummary(summaryData);
     } catch (err) {
@@ -76,56 +89,47 @@ export function PulseProvider({ children }) {
     } finally {
       setLoading(false);
     }
-  }, [activeCategory, activeSort]);
+  }, [activePhase, activeCategory, activeSort]);
 
   useEffect(() => {
     refreshData();
   }, [refreshData]);
 
-  // Actions
-  const toggleTaskStatus = async (taskId) => {
-    const task = tasks.find((t) => t.id === taskId);
-    if (!task) return;
-
-    let newStatus = 'Completed';
-    if (task.status === 'Completed') {
-      newStatus = 'In Progress';
-    } else if (task.status === 'In Progress') {
-      newStatus = 'Completed';
-    } else {
-      newStatus = 'In Progress';
-    }
-
+  // Update Task Progress & Points in Gantt Schedule
+  const updateTaskProgress = async (taskId, progressPct, status = null, assigneeId = null) => {
     try {
-      const result = await api.updateTaskStatus(taskId, newStatus);
-      if (result.attribution) {
+      const updated = await api.updateTaskProgress(taskId, progressPct, status, assigneeId);
+      if (progressPct === 100) {
         showToast(
-          'Task Completed & Attributed!',
-          result.attribution.message,
+          'Task 100% Completed!',
+          `${updated.title} marked complete! Velocity points attributed to ${updated.assignee_id ? updated.assignee_id.toUpperCase() : 'team'}.`,
           'success'
         );
       } else {
-        showToast('Task Updated', `Task ${taskId} moved to ${newStatus}`, 'info');
+        showToast('Progress Updated', `${updated.title}: ${updated.progress_pct}% (${updated.status})`, 'info');
       }
       await refreshData();
+      return updated;
     } catch (err) {
-      console.error('Failed to update task status:', err);
+      console.error('Failed to update task progress:', err);
       showToast('Error', err.message, 'error');
     }
   };
 
-  const createNewTask = async (taskPayload) => {
-    try {
-      const created = await api.createTask(taskPayload);
-      showToast('New Task Created', `Task [${created.id}] added to backlog`, 'success');
-      await refreshData();
-      setIsNewTaskOpen(false);
-      return created;
-    } catch (err) {
-      console.error('Failed to create task:', err);
-      showToast('Error', err.message, 'error');
-      throw err;
+  // Legacy task toggler for kanban/quick click
+  const toggleTaskStatus = async (taskId) => {
+    const task = ganttTasks.find((t) => t.id === taskId);
+    if (!task) return;
+
+    let newPct = 100;
+    if (task.progress_pct === 100) {
+      newPct = 50;
+    } else if (task.progress_pct > 0) {
+      newPct = 100;
+    } else {
+      newPct = 50;
     }
+    await updateTaskProgress(taskId, newPct);
   };
 
   const createNewContribution = async (contribPayload) => {
@@ -170,6 +174,45 @@ export function PulseProvider({ children }) {
     }
   };
 
+  const [isEditMemberOpen, setIsEditMemberOpen] = useState(false);
+  const [editingMember, setEditingMember] = useState(null);
+
+  const openEditMember = (member) => {
+    setEditingMember(member);
+    setIsEditMemberOpen(true);
+  };
+
+  const closeEditMember = () => {
+    setEditingMember(null);
+    setIsEditMemberOpen(false);
+  };
+
+  const updateMember = async (memberId, updatePayload) => {
+    try {
+      const res = await api.updateMember(memberId, updatePayload);
+      showToast('Member Updated', `${updatePayload.name || memberId} updated successfully`, 'success');
+      await refreshData();
+      closeEditMember();
+      return res;
+    } catch (err) {
+      console.error('Failed to update member:', err);
+      showToast('Error', err.message, 'error');
+      throw err;
+    }
+  };
+
+  const deleteMember = async (memberId) => {
+    try {
+      await api.deleteMember(memberId);
+      showToast('Member Removed', `Member ${memberId.toUpperCase()} removed from project`, 'info');
+      await refreshData();
+    } catch (err) {
+      console.error('Failed to delete member:', err);
+      showToast('Error', err.message, 'error');
+      throw err;
+    }
+  };
+
   const openMemberAudit = (memberId) => {
     setSelectedMemberId(memberId);
     setIsMemberDossierOpen(true);
@@ -181,10 +224,15 @@ export function PulseProvider({ children }) {
         activeTab,
         setActiveTab,
         members,
-        tasks,
+        ganttTasks,
+        tasks: ganttTasks, // compatibility alias
+        milestones,
+        modules,
         contributions,
         summary,
         loading,
+        activePhase,
+        setActivePhase,
         activeCategory,
         setActiveCategory,
         activeSort,
@@ -192,10 +240,14 @@ export function PulseProvider({ children }) {
         activeTimeframe,
         setActiveTimeframe,
         refreshData,
+        updateTaskProgress,
         toggleTaskStatus,
-        createNewTask,
         createNewContribution,
         createNewMember,
+        updateMember,
+        deleteMember,
+        openEditMember,
+        closeEditMember,
         deleteContribution,
         openMemberAudit,
         // Modals
@@ -207,6 +259,9 @@ export function PulseProvider({ children }) {
         setIsMemberDossierOpen,
         isAddMemberOpen,
         setIsAddMemberOpen,
+        isEditMemberOpen,
+        setIsEditMemberOpen,
+        editingMember,
         isAuthOpen,
         setIsAuthOpen,
         selectedMemberId,

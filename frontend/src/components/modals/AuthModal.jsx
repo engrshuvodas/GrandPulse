@@ -70,7 +70,7 @@ export default function AuthModal() {
                 onClick={() => handleQuickLogin('shuvo')}
                 className="p-2 rounded-lg bg-surface-container hover:bg-surface-container-high border border-surface-container-highest text-left transition-colors"
               >
-                <div className="text-xs font-bold text-on-surface">Shuvo K.</div>
+                <div className="text-xs font-bold text-on-surface">Shuvo Das</div>
                 <div className="text-[10px] text-tertiary">Lead Architect</div>
               </button>
               <button
@@ -78,7 +78,7 @@ export default function AuthModal() {
                 onClick={() => handleQuickLogin('monami')}
                 className="p-2 rounded-lg bg-surface-container hover:bg-surface-container-high border border-surface-container-highest text-left transition-colors"
               >
-                <div className="text-xs font-bold text-on-surface">Monami Sen</div>
+                <div className="text-xs font-bold text-on-surface">Monami Sadhu</div>
                 <div className="text-[10px] text-secondary">Backend Lead</div>
               </button>
               <button
@@ -86,7 +86,7 @@ export default function AuthModal() {
                 onClick={() => handleQuickLogin('setu')}
                 className="p-2 rounded-lg bg-surface-container hover:bg-surface-container-high border border-surface-container-highest text-left transition-colors"
               >
-                <div className="text-xs font-bold text-on-surface">Setu Rahman</div>
+                <div className="text-xs font-bold text-on-surface">Setu Mondol</div>
                 <div className="text-[10px] text-primary">UI/UX Lead</div>
               </button>
             </div>

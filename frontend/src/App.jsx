@@ -10,13 +10,12 @@ import LogContributionModal from './components/modals/LogContributionModal';
 import NewTaskModal from './components/modals/NewTaskModal';
 import MemberDossierModal from './components/modals/MemberDossierModal';
 import AddMemberModal from './components/modals/AddMemberModal';
+import EditMemberModal from './components/modals/EditMemberModal';
 import AuthModal from './components/modals/AuthModal';
 
-// Pages
-import DashboardPage from './pages/DashboardPage';
-import KanbanPage from './pages/KanbanPage';
-import ContributionsPage from './pages/ContributionsPage';
-import TeamMembersPage from './pages/TeamMembersPage';
+// Streamlined Pages
+import GanttDashboardPage from './pages/GanttDashboardPage';
+import GrandChartPage from './pages/GrandChartPage';
 import AnalyticsPage from './pages/AnalyticsPage';
 import ExportPage from './pages/ExportPage';
 
@@ -25,22 +24,20 @@ function MainLayout() {
 
   const renderActivePage = () => {
     switch (activeTab) {
+      case 'gantt':
       case 'dashboard':
-        return <DashboardPage />;
-      case 'tasks-kanban':
-        return <KanbanPage />;
+        return <GanttDashboardPage />;
+      case 'grandchart':
       case 'contributions':
-      case 'activity-history':
-      case 'settings':
-        return <ContributionsPage />;
       case 'team-members':
-        return <TeamMembersPage />;
+        return <GrandChartPage />;
       case 'analytics':
         return <AnalyticsPage />;
+      case 'export':
       case 'export-reports':
         return <ExportPage />;
       default:
-        return <DashboardPage />;
+        return <GanttDashboardPage />;
     }
   };
 
@@ -62,6 +59,7 @@ function MainLayout() {
       <NewTaskModal />
       <MemberDossierModal />
       <AddMemberModal />
+      <EditMemberModal />
       <AuthModal />
 
       {/* Toast Notification */}

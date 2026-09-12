@@ -7,24 +7,31 @@ from openpyxl.utils import get_column_letter
 def generate_grandpulse_excel(
     members_data: list[dict],
     contributions_data: list[dict],
-    tasks_data: list[dict],
+    gantt_tasks_data: list[dict],
+    milestones_data: list[dict],
+    modules_data: list[dict],
     summary_data: dict
 ) -> io.BytesIO:
     """
     Generates a beautifully styled, comprehensive GrandPulse Excel spreadsheet
-    using openpyxl with multiple dedicated worksheets.
+    using openpyxl with multiple dedicated worksheets, including the 16-Week Gantt Matrix,
+    Milestones, 10 Major Modules, and Member Contributions.
     """
     wb = Workbook()
     
     # Define styles
     header_fill = PatternFill(start_color="1F2430", end_color="1F2430", fill_type="solid")
     accent_fill = PatternFill(start_color="4F46E5", end_color="4F46E5", fill_type="solid")
+    gantt_bar_fill = PatternFill(start_color="4338CA", end_color="4338CA", fill_type="solid") # deep indigo
+    gantt_done_fill = PatternFill(start_color="059669", end_color="059669", fill_type="solid") # emerald green
     gold_fill = PatternFill(start_color="FEF3C7", end_color="FEF3C7", fill_type="solid")
     silver_fill = PatternFill(start_color="F1F5F9", end_color="F1F5F9", fill_type="solid")
     bronze_fill = PatternFill(start_color="FFEDD5", end_color="FFEDD5", fill_type="solid")
     zebra_fill = PatternFill(start_color="F9FAFB", end_color="F9FAFB", fill_type="solid")
+    week_header_fill = PatternFill(start_color="312E81", end_color="312E81", fill_type="solid")
     
     header_font = Font(name="Calibri", size=11, bold=True, color="FFFFFF")
+    white_bold_font = Font(name="Calibri", size=10, bold=True, color="FFFFFF")
     title_font = Font(name="Calibri", size=16, bold=True, color="1E1B4B")
     subtitle_font = Font(name="Calibri", size=10, italic=True, color="6B7280")
     bold_font = Font(name="Calibri", size=11, bold=True)
@@ -42,58 +49,139 @@ def generate_grandpulse_excel(
     align_right = Alignment(horizontal="right", vertical="center")
 
     # ==========================================
-    # SHEET 1: Executive Summary
+    # SHEET 1: 16-Week Gantt Schedule Matrix
     # ==========================================
-    ws_summary = wb.active
-    ws_summary.title = "Executive Summary"
-    ws_summary.views.sheetView[0].showGridLines = True
+    ws_gantt = wb.active
+    ws_gantt.title = "16-Week Gantt Matrix"
+    ws_gantt.views.sheetView[0].showGridLines = True
     
-    ws_summary.merge_cells("A1:F1")
-    ws_summary["A1"] = "GRANDPULSE EXECUTIVE VELOCITY & CONTRIBUTION REPORT"
-    ws_summary["A1"].font = title_font
-    ws_summary["A1"].alignment = align_left
+    ws_gantt.merge_cells("A1:W1")
+    ws_gantt["A1"] = "HOSTEL MANAGEMENT SYSTEM — 16-WEEK GANTT SCHEDULE (PDF SPECIFICATION)"
+    ws_gantt["A1"].font = title_font
+    ws_gantt["A1"].alignment = align_left
     
-    ws_summary["A2"] = f"Generated on {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')} · Sprint Epoch 2025.03 / v2.4"
-    ws_summary["A2"].font = subtitle_font
+    ws_gantt["A2"] = f"Generated on {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')} · Project Duration: 16 Weeks · Software Engineering Documentation"
+    ws_gantt["A2"].font = subtitle_font
+
+    gantt_static_headers = ["ID", "Task Name", "Phase", "Start Wk", "End Wk", "Duration", "Progress %", "Status", "Assignee"]
+    week_headers = [f"W{i}" for i in range(1, 17)]
+    all_gantt_headers = gantt_static_headers + week_headers
+
+    for col_idx, h in enumerate(all_gantt_headers, 1):
+        cell = ws_gantt.cell(row=4, column=col_idx, value=h)
+        cell.fill = week_header_fill if col_idx > len(gantt_static_headers) else header_fill
+        cell.font = header_font
+        cell.alignment = align_center
+        cell.border = thin_border
+
+    start_row = 5
+    for r_idx, task in enumerate(gantt_tasks_data, start_row):
+        ws_gantt.cell(row=r_idx, column=1, value=task.get("id"))
+        ws_gantt.cell(row=r_idx, column=2, value=task.get("title")).font = bold_font
+        ws_gantt.cell(row=r_idx, column=3, value=task.get("phase"))
+        ws_gantt.cell(row=r_idx, column=4, value=f"W{task.get('start_week')}")
+        ws_gantt.cell(row=r_idx, column=5, value=f"W{task.get('end_week')}")
+        ws_gantt.cell(row=r_idx, column=6, value=f"{task.get('duration_weeks')} wks")
+        ws_gantt.cell(row=r_idx, column=7, value=f"{task.get('progress_pct', 0)}%")
+        ws_gantt.cell(row=r_idx, column=8, value=task.get("status"))
+        ws_gantt.cell(row=r_idx, column=9, value=task.get("assignee_id") or "Unassigned")
+
+        for c_idx in range(1, 10):
+            c = ws_gantt.cell(row=r_idx, column=c_idx)
+            c.border = thin_border
+            if r_idx % 2 == 0:
+                c.fill = zebra_fill
+            if c_idx in [1, 4, 5, 6, 7, 8]:
+                c.alignment = align_center
+
+        # Week Columns W1 to W16
+        s_wk = task.get("start_week", 1)
+        e_wk = task.get("end_week", 1)
+        pct = task.get("progress_pct", 0)
+
+        for w in range(1, 17):
+            w_col = 9 + w
+            w_cell = ws_gantt.cell(row=r_idx, column=w_col)
+            w_cell.border = thin_border
+            if s_wk <= w <= e_wk:
+                # Active week block (PDF: █)
+                if pct == 100:
+                    w_cell.fill = gantt_done_fill
+                    w_cell.value = "DONE"
+                else:
+                    w_cell.fill = gantt_bar_fill
+                    w_cell.value = f"{pct}%" if w == s_wk else "█"
+                w_cell.font = white_bold_font
+                w_cell.alignment = align_center
+            else:
+                w_cell.value = ""
+
+    # ==========================================
+    # SHEET 2: Major Modules (10 Modules)
+    # ==========================================
+    ws_modules = wb.create_sheet(title="Major Modules")
+    ws_modules.views.sheetView[0].showGridLines = True
+
+    ws_modules.merge_cells("A1:E1")
+    ws_modules["A1"] = "HOSTEL MANAGEMENT SYSTEM — 10 MAJOR MODULES (PDF SPECIFICATION)"
+    ws_modules["A1"].font = title_font
     
-    # KPI Summary Cards in Table Format
-    kpi_headers = ["Metric Key", "Current Value", "Benchmark Target", "Status"]
-    for col_idx, h in enumerate(kpi_headers, 1):
-        cell = ws_summary.cell(row=4, column=col_idx, value=h)
+    mod_headers = ["Module #", "Module Title", "Description", "Status", "Completion %", "Module Lead"]
+    for col_idx, h in enumerate(mod_headers, 1):
+        cell = ws_modules.cell(row=3, column=col_idx, value=h)
         cell.fill = accent_fill
         cell.font = header_font
         cell.alignment = align_center
+        cell.border = thin_border
 
-    kpis = [
-        ("Active Core Engineers", f"{summary_data.get('active_members', 3)} members", "3 core", "Optimal"),
-        ("Sprint Points Recorded", f"{summary_data.get('total_points', 148)} pts", "120 pts", "Exceeded (+23.3%)"),
-        ("Sprint Velocity Rate", f"{summary_data.get('sprint_velocity', '94.2%')}", "85.0%", "Healthy"),
-        ("Logged Engineering Hours", f"{summary_data.get('total_hours', 168.5)} hrs", "160.0 hrs", "On Track"),
-        ("Completed Tasks", f"{summary_data.get('completed_tasks', 15)} of {summary_data.get('total_tasks', 24)}", "60% minimum", f"{summary_data.get('completed_ratio', 62.5)}%"),
-        ("Tasks In Progress", f"{summary_data.get('inprogress_tasks', 6)} tasks", "≤ 8 tasks", "Balanced WIP"),
-        ("Audit Pass Rate", "96.8%", "95.0%", "Verified"),
-        ("Sprint Burndown Pace", "88.4%", "80.0%", "Pacing Ahead")
-    ]
+    for r_idx, mod in enumerate(modules_data, 4):
+        ws_modules.cell(row=r_idx, column=1, value=f"Module {mod.get('id')}").alignment = align_center
+        ws_modules.cell(row=r_idx, column=2, value=mod.get("name")).font = bold_font
+        ws_modules.cell(row=r_idx, column=3, value=mod.get("description", ""))
+        ws_modules.cell(row=r_idx, column=4, value=mod.get("status")).alignment = align_center
+        ws_modules.cell(row=r_idx, column=5, value=f"{mod.get('completion_pct', 0)}%").alignment = align_center
+        ws_modules.cell(row=r_idx, column=6, value=mod.get("lead_id") or "Engineering Team")
 
-    for row_idx, (k, val, target, status) in enumerate(kpis, 5):
-        c1 = ws_summary.cell(row=row_idx, column=1, value=k)
-        c2 = ws_summary.cell(row=row_idx, column=2, value=val)
-        c3 = ws_summary.cell(row=row_idx, column=3, value=target)
-        c4 = ws_summary.cell(row=row_idx, column=4, value=status)
-        for c in (c1, c2, c3, c4):
+        for col_idx in range(1, 7):
+            c = ws_modules.cell(row=r_idx, column=col_idx)
             c.border = thin_border
-            c.font = regular_font
-            if row_idx % 2 == 0:
+            if r_idx % 2 == 0:
                 c.fill = zebra_fill
-        c2.font = bold_font
-        c2.alignment = align_center
-        c3.alignment = align_center
-        c4.alignment = align_center
 
     # ==========================================
-    # SHEET 2: Leaderboard & Velocity
+    # SHEET 3: Key Milestones
     # ==========================================
-    ws_leaderboard = wb.create_sheet(title="Leaderboard & Rankings")
+    ws_milestones = wb.create_sheet(title="Key Milestones")
+    ws_milestones.views.sheetView[0].showGridLines = True
+
+    ws_milestones.merge_cells("A1:D1")
+    ws_milestones["A1"] = "PROJECT MILESTONES ROADMAP (16 WEEKS)"
+    ws_milestones["A1"].font = title_font
+
+    ms_headers = ["Milestone #", "Target Week", "Milestone Deliverable", "Status"]
+    for col_idx, h in enumerate(ms_headers, 1):
+        cell = ws_milestones.cell(row=3, column=col_idx, value=h)
+        cell.fill = header_fill
+        cell.font = header_font
+        cell.alignment = align_center
+        cell.border = thin_border
+
+    for r_idx, ms in enumerate(milestones_data, 4):
+        ws_milestones.cell(row=r_idx, column=1, value=f"MS-{ms.get('id')}").alignment = align_center
+        ws_milestones.cell(row=r_idx, column=2, value=f"Week {ms.get('week')}").alignment = align_center
+        ws_milestones.cell(row=r_idx, column=3, value=ms.get("title")).font = bold_font
+        status_cell = ws_milestones.cell(row=r_idx, column=4, value=ms.get("status"))
+        status_cell.alignment = align_center
+        if ms.get("completed"):
+            status_cell.fill = PatternFill(start_color="DCFCE7", end_color="DCFCE7", fill_type="solid")
+
+        for col_idx in range(1, 5):
+            ws_milestones.cell(row=r_idx, column=col_idx).border = thin_border
+
+    # ==========================================
+    # SHEET 4: Grand Contribution & Leaderboard
+    # ==========================================
+    ws_leaderboard = wb.create_sheet(title="Team Grand Chart")
     ws_leaderboard.views.sheetView[0].showGridLines = True
     
     lb_headers = ["Rank", "Member ID", "Full Name", "Role", "Points Recorded", "Total Hours", "Tasks Completed", "Tasks WIP", "Total Logs", "Team Share %"]
@@ -122,7 +210,6 @@ def generate_grandpulse_excel(
         r_cell.alignment = align_center
         pct_cell.alignment = align_right
 
-        # Rank highlighting
         tier_fill = gold_fill if rank == 1 else (silver_fill if rank == 2 else (bronze_fill if rank == 3 else None))
         for col_idx in range(1, 11):
             cell = ws_leaderboard.cell(row=row_idx, column=col_idx)
@@ -130,70 +217,7 @@ def generate_grandpulse_excel(
             if tier_fill:
                 cell.fill = tier_fill
 
-    # ==========================================
-    # SHEET 3: Contribution Ledger
-    # ==========================================
-    ws_ledger = wb.create_sheet(title="Contribution Ledger")
-    ws_ledger.views.sheetView[0].showGridLines = True
-    
-    cl_headers = ["Log ID", "Member", "Contribution Title", "Category", "Impact Tier", "Logged Hours", "Points", "Linked Task", "Verified", "Logged Date"]
-    for col_idx, h in enumerate(cl_headers, 1):
-        cell = ws_ledger.cell(row=1, column=col_idx, value=h)
-        cell.fill = header_fill
-        cell.font = header_font
-        cell.alignment = align_center
-        cell.border = thin_border
-
-    for row_idx, c in enumerate(contributions_data, 2):
-        ws_ledger.cell(row=row_idx, column=1, value=c.get("id"))
-        ws_ledger.cell(row=row_idx, column=2, value=c.get("member_id"))
-        ws_ledger.cell(row=row_idx, column=3, value=c.get("title"))
-        ws_ledger.cell(row=row_idx, column=4, value=c.get("category"))
-        ws_ledger.cell(row=row_idx, column=5, value=c.get("level"))
-        ws_ledger.cell(row=row_idx, column=6, value=c.get("hours"))
-        pts = ws_ledger.cell(row=row_idx, column=7, value=c.get("points"))
-        pts.font = bold_font
-        ws_ledger.cell(row=row_idx, column=8, value=c.get("task_id") or "Independent")
-        ws_ledger.cell(row=row_idx, column=9, value="Verified" if c.get("verified", True) else "In Review")
-        ws_ledger.cell(row=row_idx, column=10, value=c.get("date") or "2025-05-18")
-
-        for col_idx in range(1, 11):
-            cell = ws_ledger.cell(row=row_idx, column=col_idx)
-            cell.border = thin_border
-            if row_idx % 2 == 0:
-                cell.fill = zebra_fill
-
-    # ==========================================
-    # SHEET 4: Tasks & Kanban
-    # ==========================================
-    ws_tasks = wb.create_sheet(title="Sprint Tasks")
-    ws_tasks.views.sheetView[0].showGridLines = True
-    
-    task_headers = ["Task ID", "Title", "Assignee", "Status", "Priority", "Attributed Points", "Est Hours"]
-    for col_idx, h in enumerate(task_headers, 1):
-        cell = ws_tasks.cell(row=1, column=col_idx, value=h)
-        cell.fill = header_fill
-        cell.font = header_font
-        cell.alignment = align_center
-        cell.border = thin_border
-
-    for row_idx, t in enumerate(tasks_data, 2):
-        ws_tasks.cell(row=row_idx, column=1, value=t.get("id"))
-        ws_tasks.cell(row=row_idx, column=2, value=t.get("title"))
-        ws_tasks.cell(row=row_idx, column=3, value=t.get("assignee_id") or "Unassigned")
-        ws_tasks.cell(row=row_idx, column=4, value=t.get("status"))
-        ws_tasks.cell(row=row_idx, column=5, value=t.get("priority"))
-        t_pts = ws_tasks.cell(row=row_idx, column=6, value=t.get("points"))
-        t_pts.font = bold_font
-        ws_tasks.cell(row=row_idx, column=7, value=t.get("estimated_hours", 4.0))
-
-        for col_idx in range(1, 8):
-            cell = ws_tasks.cell(row=row_idx, column=col_idx)
-            cell.border = thin_border
-            if row_idx % 2 == 0:
-                cell.fill = zebra_fill
-
-    # Auto-adjust column widths across all worksheets
+    # Auto-adjust column widths
     for ws in wb.worksheets:
         for col in ws.columns:
             max_len = 0
@@ -202,7 +226,7 @@ def generate_grandpulse_excel(
                 val = str(cell.value or '')
                 if len(val) > max_len:
                     max_len = len(val)
-            ws.column_dimensions[col_letter].width = max(max_len + 4, 12)
+            ws.column_dimensions[col_letter].width = max(min(max_len + 4, 38), 7)
 
     output = io.BytesIO()
     wb.save(output)

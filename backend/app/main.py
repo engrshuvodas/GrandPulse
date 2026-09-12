@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.database import engine, Base, SessionLocal, active_dialect
 from app.seed_data import seed_database
-from app.routers import auth, members, tasks, contributions, analytics, export
+from app.routers import auth, members, tasks, contributions, analytics, export, gantt
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("grandpulse")
@@ -48,6 +48,7 @@ app.add_middleware(
 
 # Include Routers
 app.include_router(auth.router)
+app.include_router(gantt.router)
 app.include_router(members.router)
 app.include_router(tasks.router)
 app.include_router(contributions.router)

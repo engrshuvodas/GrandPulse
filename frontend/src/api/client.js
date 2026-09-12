@@ -67,6 +67,15 @@ export const api = {
       method: 'POST',
       body: JSON.stringify(memberData),
     }),
+  updateMember: (memberId, memberData) =>
+    request(`/members/${memberId}`, {
+      method: 'PUT',
+      body: JSON.stringify(memberData),
+    }),
+  deleteMember: (memberId) =>
+    request(`/members/${memberId}`, {
+      method: 'DELETE',
+    }),
 
   // Tasks
   getTasks: (params = {}) => {
@@ -119,6 +128,18 @@ export const api = {
     request(`/analytics/weekly-velocity?member_id=${encodeURIComponent(memberId)}`),
   getCategoryDistribution: (memberId = 'ALL') =>
     request(`/analytics/category-distribution?member_id=${encodeURIComponent(memberId)}`),
+
+  // Gantt Chart & Schedule (PDF Spec)
+  getGanttTasks: (phase = 'ALL') =>
+    request(`/gantt/tasks${phase && phase !== 'ALL' ? `?phase=${encodeURIComponent(phase)}` : ''}`),
+  getMilestones: () => request('/gantt/milestones'),
+  getProjectModules: () => request('/gantt/modules'),
+  updateTaskProgress: (taskId, progressPct, status = null, assigneeId = null) =>
+    request(`/gantt/tasks/${taskId}/progress`, {
+      method: 'PATCH',
+      body: JSON.stringify({ progress_pct: progressPct, status, assignee_id: assigneeId }),
+    }),
+  getGanttSummary: () => request('/gantt/summary'),
 
   // Export URLs
   getExcelExportUrl: () => `${API_BASE}/export/excel`,

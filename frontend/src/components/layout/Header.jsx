@@ -1,50 +1,42 @@
 import React from 'react';
 import { usePulse } from '../../context/PulseContext';
 import { useAuth } from '../../context/AuthContext';
+import { api } from '../../api/client';
 
 export default function Header() {
-  const { setIsLogContribOpen, setIsNewTaskOpen, setIsAuthOpen } = usePulse();
+  const { setIsLogContribOpen, setIsAuthOpen } = usePulse();
   const { user, logout } = useAuth();
+
+  const handleDownloadExcel = () => {
+    window.open(api.getExcelExportUrl(), '_blank');
+  };
 
   return (
     <header className="fixed top-0 left-64 right-0 h-16 bg-surface-container-lowest/90 backdrop-blur-xl z-40 px-space-xl flex items-center justify-between shadow-[0_1px_8px_rgba(0,0,0,0.2)] border-b border-surface-container-highest/30">
-      {/* Left Area: Breadcrumb & Quick Search */}
+      {/* Left Area: Project Breadcrumb */}
       <div className="flex items-center gap-space-lg">
         <div className="flex items-center gap-space-xs font-title-sm text-title-sm">
-          <span className="text-primary font-bold">Alpha Release v2.4</span>
+          <span className="text-primary font-bold">Hostel Management System</span>
           <span className="text-outline">/</span>
-          <span className="text-on-surface-variant font-medium">Engineering Sprint</span>
-        </div>
-        <div className="relative hidden xl:flex items-center">
-          <span className="material-symbols-outlined absolute left-space-md text-outline text-[18px]">
-            search
-          </span>
-          <input
-            className="w-72 bg-surface-container-low text-on-surface placeholder-outline font-body-sm text-body-sm pl-9 pr-space-md py-1.5 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary border border-surface-container-highest/40"
-            placeholder="Search tasks, contributions, members..."
-            type="text"
-          />
+          <span className="text-on-surface-variant font-medium">16-Week Gantt Schedule</span>
         </div>
       </div>
 
-      {/* Right Area: Sprint, Action Triggers & User Profile */}
+      {/* Right Area: Status & Actions */}
       <div className="flex items-center gap-space-md">
-        {/* Sprint Tag */}
+        {/* Active Week Tag */}
         <div className="hidden md:flex items-center gap-space-xs bg-surface-container-low px-space-sm py-1 rounded-lg text-on-surface-variant font-label-md text-label-md border border-surface-container-highest/40">
-          <span className="material-symbols-outlined text-[16px] text-outline">
+          <span className="material-symbols-outlined text-[16px] text-primary">
             calendar_today
           </span>
-          <span className="font-semibold">This Sprint (W12)</span>
-          <span className="material-symbols-outlined text-[16px] text-outline">
-            arrow_drop_down
-          </span>
+          <span className="font-semibold text-xs">Active: Week 6 of 16</span>
         </div>
 
-        {/* Primary Action Buttons */}
+        {/* Action Buttons */}
         <div className="flex items-center gap-space-sm">
           <button
             onClick={() => setIsLogContribOpen(true)}
-            className="flex items-center gap-space-xs bg-surface-container-high hover:bg-surface-container hover:text-on-surface text-on-surface-variant font-label-md text-label-md px-space-md py-1.5 rounded-lg transition-colors border border-surface-container-highest/50 active:scale-95"
+            className="flex items-center gap-space-xs bg-surface-container-high hover:bg-surface-container hover:text-on-surface text-on-surface-variant font-label-md text-xs px-space-md py-1.5 rounded-lg transition-colors border border-surface-container-highest/50 active:scale-95"
           >
             <span className="material-symbols-outlined text-[16px] text-tertiary">
               add
@@ -53,38 +45,17 @@ export default function Header() {
           </button>
 
           <button
-            onClick={() => setIsNewTaskOpen(true)}
-            className="flex items-center gap-space-xs bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md px-space-md py-1.5 rounded-lg transition-colors font-semibold shadow-sm active:scale-95"
+            onClick={handleDownloadExcel}
+            className="flex items-center gap-space-xs bg-primary hover:bg-primary-container text-on-primary font-label-md text-xs px-space-md py-1.5 rounded-lg transition-colors font-semibold shadow-sm active:scale-95"
           >
             <span className="material-symbols-outlined text-[16px]">
-              add_task
+              file_download
             </span>
-            <span>New Task</span>
+            <span>Export Excel</span>
           </button>
         </div>
 
         <div className="h-5 w-[1px] bg-surface-container-highest mx-space-xs"></div>
-
-        {/* Notifications Icon */}
-        <button
-          className="relative p-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded-lg transition-colors"
-          title="Notifications"
-        >
-          <span className="material-symbols-outlined text-[20px]">
-            notifications
-          </span>
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full animate-pulse"></span>
-        </button>
-
-        {/* Dark Mode Icon */}
-        <button
-          className="p-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded-lg transition-colors"
-          title="Theme Toggle"
-        >
-          <span className="material-symbols-outlined text-[20px]">
-            dark_mode
-          </span>
-        </button>
 
         {/* User Identity / Auth Trigger */}
         {user ? (
@@ -93,10 +64,10 @@ export default function Header() {
               {user.username.slice(0, 2).toUpperCase()}
             </div>
             <div className="hidden lg:flex flex-col text-left">
-              <span className="font-label-md text-label-md text-on-surface leading-tight font-bold">
+              <span className="font-label-md text-xs text-on-surface leading-tight font-bold">
                 {user.username}
               </span>
-              <span className="font-label-sm text-label-sm text-tertiary leading-none">
+              <span className="font-label-sm text-[10px] text-tertiary leading-none">
                 {user.role}
               </span>
             </div>
@@ -119,11 +90,11 @@ export default function Header() {
               </span>
             </div>
             <div className="hidden lg:flex flex-col text-left">
-              <span className="font-label-md text-label-md text-on-surface leading-tight font-bold">
-                Shuvo K.
+              <span className="font-label-md text-xs text-on-surface leading-tight font-bold">
+                Shuvo Das
               </span>
-              <span className="font-label-sm text-label-sm text-tertiary leading-none font-semibold">
-                Lead Architect (Demo)
+              <span className="font-label-sm text-[10px] text-tertiary leading-none font-semibold">
+                Lead Architect & Full-Stack
               </span>
             </div>
           </button>

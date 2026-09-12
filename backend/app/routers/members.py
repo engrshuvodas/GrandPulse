@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models import Member, Task, Contribution
-from app.schemas import MemberResponse, MemberCreate
+from app.schemas import MemberResponse, MemberCreate, MemberUpdate
 
 router = APIRouter(prefix="/api/members", tags=["Team Members"])
 
@@ -106,13 +106,21 @@ def create_member(payload: MemberCreate, db: Session = Depends(get_db)):
     if existing:
         raise HTTPException(status_code=400, detail="Member ID already exists")
 
-    new_member = Member(**payload.dict())
+    # Generate initials if not given
+    initials = payload.avatar_initial
+    if not initials and payload.name:
+        parts = payload.name.strip().split()
+        initials = "".join([p[0].upper() for p in parts[:2]])
+
+    member_dict = payload.dict()
+    member_dict["avatar_initial"] = initials
+    new_member = Member(**member_dict)
     db.add(new_member)
     db.commit()
     db.refresh(new_member)
 
     return {
-        **payload.dict(),
+        **member_dict,
         "score": 0,
         "hours": 0.0,
         "tasksCompleted": 0,
@@ -120,4 +128,64 @@ def create_member(payload: MemberCreate, db: Session = Depends(get_db)):
         "logsCount": 0,
         "rank": 99,
         "percentage": 0.0
+    }
+
+@router.put("/{member_id}")
+def update_member(member_id: str, payload: MemberUpdate, db: Session = Depends(get_db)):
+    """Update team member details (name, role, email, tech stack, avatar)."""
+    member = db.query(Member).filter(Member.id == member_id).first()
+    if not member:
+        raise HTTPException(status_code=404, detail="Member not found")
+
+    update_data = payload.dict(exclude_unset=True)
+    
+    # Auto-generate initials if name changed and avatar_initial not provided
+    if "name" in update_data and not update_data.get("avatar_initial"):
+        parts = update_data["name"].strip().split()
+        update_data["avatar_initial"] = "".join([p[0].upper() for p in parts[:2]])
+
+    for key, value in update_data.items():
+        if value is not None:
+            setattr(member, key, value)
+
+    db.commit()
+    db.refresh(member)
+
+    return {
+        "success": True,
+        "message": f"Member {member.name} updated successfully",
+        "member": {
+            "id": member.id,
+            "name": member.name,
+            "role": member.role,
+            "email": member.email,
+            "tech_stack": member.tech_stack,
+            "avatar_initial": member.avatar_initial,
+            "avatar_url": member.avatar_url,
+            "active_lead": member.active_lead,
+            "accent_color": member.accent_color
+        }
+    }
+
+@router.delete("/{member_id}")
+def delete_member(member_id: str, db: Session = Depends(get_db)):
+    """Delete team member and cleanly unlink associated tasks/modules."""
+    member = db.query(Member).filter(Member.id == member_id).first()
+    if not member:
+        raise HTTPException(status_code=404, detail="Member not found")
+
+    # Unlink tasks
+    tasks = db.query(Task).filter(Task.assignee_id == member_id).all()
+    for t in tasks:
+        t.assignee_id = None
+
+    # Delete contributions
+    db.query(Contribution).filter(Contribution.member_id == member_id).delete()
+
+    db.delete(member)
+    db.commit()
+
+    return {
+        "success": True,
+        "message": f"Member {member.name} deleted successfully"
     }
