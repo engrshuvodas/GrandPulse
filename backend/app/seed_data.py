@@ -89,9 +89,9 @@ RAKTSEVA_TASKS = [
     {"id": "GT-20", "title": "SPM Thesis Documentation & User Manual", "phase": "Testing", "start_week": 12, "end_week": 14, "duration_weeks": 3, "progress_pct": 100, "status": "Completed", "priority": "Medium", "points": 5, "assignee_id": "setu", "color": "#ef4444"},
 
     # Phase 6: Deployment & Maintenance
-    {"id": "GT-21", "title": "Hospital Staging Deployment & UAT Sign-off", "phase": "Deployment", "start_week": 14, "end_week": 15, "duration_weeks": 2, "progress_pct": 100, "status": "Completed", "priority": "Urgent", "points": 5, "assignee_id": "monami", "module_id": 8, "color": "#10b981"},
-    {"id": "GT-22", "title": "Production Maintenance & Database Monitoring Setup", "phase": "Deployment", "start_week": 15, "end_week": 16, "duration_weeks": 2, "progress_pct": 100, "status": "Completed", "priority": "Medium", "points": 5, "assignee_id": "shuvo", "color": "#10b981"},
-    {"id": "GT-23", "title": "Academic Project Defense & Final Handover", "phase": "Deployment", "start_week": 15, "end_week": 16, "duration_weeks": 2, "progress_pct": 100, "status": "Completed", "priority": "Urgent", "points": 5, "assignee_id": "shuvo", "color": "#10b981"},
+    {"id": "GT-21", "title": "Hospital Staging Deployment & UAT Sign-off", "phase": "Deployment", "start_week": 14, "end_week": 15, "duration_weeks": 2, "progress_pct": 0, "status": "Pending", "priority": "Urgent", "points": 5, "assignee_id": "monami", "module_id": 8, "color": "#10b981"},
+    {"id": "GT-22", "title": "Production Maintenance & Database Monitoring Setup", "phase": "Deployment", "start_week": 15, "end_week": 16, "duration_weeks": 2, "progress_pct": 0, "status": "Pending", "priority": "Medium", "points": 5, "assignee_id": "shuvo", "color": "#10b981"},
+    {"id": "GT-23", "title": "Academic Project Defense & Final Handover", "phase": "Deployment", "start_week": 15, "end_week": 16, "duration_weeks": 2, "progress_pct": 0, "status": "Pending", "priority": "Urgent", "points": 5, "assignee_id": "shuvo", "color": "#10b981"},
 ]
 
 # EXACT 7 MILESTONES FOR RAKTSEVA (16 WEEKS)
@@ -101,8 +101,8 @@ RAKTSEVA_MILESTONES = [
     {"id": 3, "week": 9, "title": "Core Donor Registration & Blood Search Modules Completed", "status": "Completed", "completed": True},
     {"id": 4, "week": 12, "title": "System Testing, OWASP Security Audit & Bug Fixing Cleared", "status": "Completed", "completed": True},
     {"id": 5, "week": 14, "title": "Comprehensive SPM Documentation & User Manual Completed", "status": "Completed", "completed": True},
-    {"id": 6, "week": 15, "title": "Parul Sevashram Hospital Staging Server Setup & UAT Sign-off", "status": "Completed", "completed": True},
-    {"id": 7, "week": 16, "title": "Final University Academic Project Defense & Faculty Evaluation", "status": "Completed", "completed": True}
+    {"id": 6, "week": 15, "title": "Parul Sevashram Hospital Staging Server Setup & UAT Sign-off", "status": "In Progress", "completed": False},
+    {"id": 7, "week": 16, "title": "Final University Academic Project Defense & Faculty Evaluation", "status": "Upcoming", "completed": False}
 ]
 
 # EXACT 10 MAJOR MODULES OF RAKTSEVA BLOOD BANK SYSTEM (FROM SRS)
