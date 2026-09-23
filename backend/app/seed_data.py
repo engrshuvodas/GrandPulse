@@ -56,25 +56,42 @@ RAKTSEVA_USERS = [
     {"username": "setu", "email": "setu.mondol@grandpulse.dev", "password": "password123", "role": "UI/UX Lead", "member_id": "setu"}
 ]
 
-# EXACT 17 TASKS FOR RAKTSEVA 16-WEEK SPM LIFECYCLE
+# EXACT 23 TASKS FOR RAKTSEVA 16-WEEK SPM LIFECYCLE (MATCHING GANTT SPECIFICATION)
 RAKTSEVA_TASKS = [
-    {"id": "GT-01", "title": "Project Planning, Stakeholder Scope & SRS v1.0", "phase": "Planning", "start_week": 1, "end_week": 2, "duration_weeks": 2, "progress_pct": 100, "status": "Completed", "priority": "Urgent", "points": 5, "assignee_id": "shuvo", "color": "#6366f1"},
-    {"id": "GT-02", "title": "Requirement Analysis & Hospital Elicitation", "phase": "Planning", "start_week": 2, "end_week": 3, "duration_weeks": 2, "progress_pct": 100, "status": "Completed", "priority": "High", "points": 5, "assignee_id": "monami", "color": "#8b5cf6"},
-    {"id": "GT-03", "title": "Feasibility Study & Technology Stack Benchmarking", "phase": "Planning", "start_week": 2, "end_week": 3, "duration_weeks": 2, "progress_pct": 100, "status": "Completed", "priority": "Medium", "points": 3, "assignee_id": "setu", "color": "#a855f7"},
-    {"id": "GT-04", "title": "System Architecture, UML & DFD (Level 0, 1, 2)", "phase": "Design", "start_week": 4, "end_week": 6, "duration_weeks": 3, "progress_pct": 100, "status": "Completed", "priority": "Urgent", "points": 5, "assignee_id": "monami", "color": "#ec4899"},
-    {"id": "GT-05", "title": "Database Architecture (7 Relational Tables & ERD)", "phase": "Design", "start_week": 5, "end_week": 6, "duration_weeks": 2, "progress_pct": 100, "status": "Completed", "priority": "High", "points": 5, "assignee_id": "shuvo", "module_id": 9, "color": "#f43f5e"},
-    {"id": "GT-06", "title": "UI/UX Prototyping (Public Portal & Admin Panel)", "phase": "Design", "start_week": 4, "end_week": 6, "duration_weeks": 3, "progress_pct": 100, "status": "Completed", "priority": "High", "points": 5, "assignee_id": "setu", "module_id": 7, "color": "#06b6d4"},
-    {"id": "GT-07", "title": "Core FastAPI Backend Architecture & API Gateway", "phase": "Development", "start_week": 5, "end_week": 9, "duration_weeks": 5, "progress_pct": 100, "status": "Completed", "priority": "Urgent", "points": 8, "assignee_id": "shuvo", "color": "#3b82f6"},
-    {"id": "GT-08", "title": "User Authentication & bcrypt Security Module", "phase": "Development", "start_week": 5, "end_week": 6, "duration_weeks": 2, "progress_pct": 100, "status": "Completed", "priority": "High", "points": 5, "assignee_id": "monami", "module_id": 1, "color": "#10b981"},
-    {"id": "GT-09", "title": "Donor Registration & Validation Engine", "phase": "Development", "start_week": 6, "end_week": 7, "duration_weeks": 2, "progress_pct": 100, "status": "Completed", "priority": "High", "points": 5, "assignee_id": "shuvo", "module_id": 2, "color": "#14b8a6"},
-    {"id": "GT-10", "title": "Blood Group Search & Compatibility Algorithm", "phase": "Development", "start_week": 7, "end_week": 8, "duration_weeks": 2, "progress_pct": 100, "status": "Completed", "priority": "High", "points": 5, "assignee_id": "setu", "module_id": 3, "color": "#f59e0b"},
-    {"id": "GT-11", "title": "Executive Admin Panel & Stock Management", "phase": "Development", "start_week": 7, "end_week": 9, "duration_weeks": 3, "progress_pct": 100, "status": "Completed", "priority": "Urgent", "points": 5, "assignee_id": "shuvo", "module_id": 6, "color": "#eab308"},
-    {"id": "GT-12", "title": "Emergency Query & Notification System", "phase": "Development", "start_week": 9, "end_week": 10, "duration_weeks": 2, "progress_pct": 100, "status": "Completed", "priority": "Medium", "points": 5, "assignee_id": "monami", "module_id": 5, "color": "#84cc16"},
-    {"id": "GT-13", "title": "Integration Testing & SQLi Security Audit", "phase": "Testing", "start_week": 10, "end_week": 12, "duration_weeks": 3, "progress_pct": 100, "status": "Completed", "priority": "Urgent", "points": 5, "assignee_id": "shuvo", "module_id": 10, "color": "#4edea3"},
-    {"id": "GT-14", "title": "Bug Fixing & Prepared Statements Hardening", "phase": "Testing", "start_week": 11, "end_week": 13, "duration_weeks": 3, "progress_pct": 90, "status": "In Progress", "priority": "High", "points": 5, "assignee_id": "monami", "module_id": 10, "color": "#22c55e"},
-    {"id": "GT-15", "title": "SPM Thesis Documentation & User Manual", "phase": "Deployment", "start_week": 12, "end_week": 14, "duration_weeks": 3, "progress_pct": 85, "status": "In Progress", "priority": "Medium", "points": 5, "assignee_id": "setu", "color": "#4cd7f6"},
-    {"id": "GT-16", "title": "Hospital Staging Deployment & Acceptance Testing", "phase": "Deployment", "start_week": 14, "end_week": 15, "duration_weeks": 2, "progress_pct": 60, "status": "In Progress", "priority": "Urgent", "points": 5, "assignee_id": "monami", "module_id": 8, "color": "#8083ff"},
-    {"id": "GT-17", "title": "Academic Project Defense & Production Handover", "phase": "Deployment", "start_week": 15, "end_week": 16, "duration_weeks": 2, "progress_pct": 30, "status": "In Progress", "priority": "Medium", "points": 5, "assignee_id": "shuvo", "color": "#c0c1ff"}
+    # Phase 1: Planning
+    {"id": "GT-01", "title": "Project Setup & Scope Definition", "phase": "Planning", "start_week": 1, "end_week": 2, "duration_weeks": 2, "progress_pct": 100, "status": "Completed", "priority": "Urgent", "points": 5, "assignee_id": "shuvo", "color": "#f59e0b"},
+    {"id": "GT-02", "title": "Hospital Requirement Elicitation & SRS", "phase": "Planning", "start_week": 1, "end_week": 2, "duration_weeks": 2, "progress_pct": 100, "status": "Completed", "priority": "High", "points": 5, "assignee_id": "monami", "color": "#f59e0b"},
+    {"id": "GT-03", "title": "Feasibility Study & Technology Stack Benchmarking", "phase": "Planning", "start_week": 2, "end_week": 3, "duration_weeks": 2, "progress_pct": 100, "status": "Completed", "priority": "Medium", "points": 3, "assignee_id": "setu", "color": "#f59e0b"},
+    {"id": "GT-04", "title": "System Scope Finalization & Guide Approval", "phase": "Planning", "start_week": 2, "end_week": 3, "duration_weeks": 2, "progress_pct": 100, "status": "Completed", "priority": "Urgent", "points": 5, "assignee_id": "shuvo", "color": "#f59e0b"},
+
+    # Phase 2: Design
+    {"id": "GT-05", "title": "System Architecture, UML & DFD (Level 0, 1, 2)", "phase": "Design", "start_week": 4, "end_week": 6, "duration_weeks": 3, "progress_pct": 100, "status": "Completed", "priority": "Urgent", "points": 5, "assignee_id": "monami", "color": "#eab308"},
+    {"id": "GT-06", "title": "Database Architecture (7 Relational Tables & ERD)", "phase": "Design", "start_week": 5, "end_week": 6, "duration_weeks": 2, "progress_pct": 100, "status": "Completed", "priority": "High", "points": 5, "assignee_id": "shuvo", "module_id": 9, "color": "#eab308"},
+    {"id": "GT-07", "title": "UI/UX Prototyping (Public Portal & Admin Panel)", "phase": "Design", "start_week": 4, "end_week": 6, "duration_weeks": 3, "progress_pct": 100, "status": "Completed", "priority": "High", "points": 5, "assignee_id": "setu", "module_id": 7, "color": "#eab308"},
+    {"id": "GT-08", "title": "Design Review & Faculty Milestone Sign-off", "phase": "Design", "start_week": 5, "end_week": 6, "duration_weeks": 2, "progress_pct": 100, "status": "Completed", "priority": "Urgent", "points": 5, "assignee_id": "monami", "color": "#eab308"},
+
+    # Phase 3: Core Module Development I
+    {"id": "GT-09", "title": "Core FastAPI Backend Architecture & API Gateway", "phase": "Development", "start_week": 5, "end_week": 9, "duration_weeks": 5, "progress_pct": 100, "status": "Completed", "priority": "Urgent", "points": 8, "assignee_id": "shuvo", "color": "#06b6d4"},
+    {"id": "GT-10", "title": "User Authentication & bcrypt Security Module", "phase": "Development", "start_week": 5, "end_week": 6, "duration_weeks": 2, "progress_pct": 100, "status": "Completed", "priority": "High", "points": 5, "assignee_id": "monami", "module_id": 1, "color": "#06b6d4"},
+    {"id": "GT-11", "title": "Donor Registration & Validation Engine", "phase": "Development", "start_week": 6, "end_week": 7, "duration_weeks": 2, "progress_pct": 100, "status": "Completed", "priority": "High", "points": 5, "assignee_id": "shuvo", "module_id": 2, "color": "#06b6d4"},
+    {"id": "GT-12", "title": "Blood Group Search & Compatibility Algorithm", "phase": "Development", "start_week": 7, "end_week": 8, "duration_weeks": 2, "progress_pct": 100, "status": "Completed", "priority": "High", "points": 5, "assignee_id": "setu", "module_id": 3, "color": "#06b6d4"},
+
+    # Phase 4: Core Module Development II
+    {"id": "GT-13", "title": "Executive Admin Panel & Stock Management", "phase": "Development", "start_week": 7, "end_week": 9, "duration_weeks": 3, "progress_pct": 100, "status": "Completed", "priority": "Urgent", "points": 5, "assignee_id": "shuvo", "module_id": 6, "color": "#ec4899"},
+    {"id": "GT-14", "title": "Emergency Blood Request & Query System", "phase": "Development", "start_week": 9, "end_week": 10, "duration_weeks": 2, "progress_pct": 100, "status": "Completed", "priority": "Medium", "points": 5, "assignee_id": "monami", "module_id": 5, "color": "#ec4899"},
+    {"id": "GT-15", "title": "CMS Page Content Editor & Hospital Master Config", "phase": "Development", "start_week": 9, "end_week": 10, "duration_weeks": 2, "progress_pct": 100, "status": "Completed", "priority": "High", "points": 5, "assignee_id": "setu", "module_id": 7, "color": "#ec4899"},
+    {"id": "GT-16", "title": "User Dashboard & Donation History Tracker", "phase": "Development", "start_week": 8, "end_week": 10, "duration_weeks": 3, "progress_pct": 100, "status": "Completed", "priority": "High", "points": 5, "assignee_id": "shuvo", "module_id": 4, "color": "#ec4899"},
+
+    # Phase 5: Testing & QA
+    {"id": "GT-17", "title": "Integration Testing & SQLi Security Audit", "phase": "Testing", "start_week": 10, "end_week": 12, "duration_weeks": 3, "progress_pct": 100, "status": "Completed", "priority": "Urgent", "points": 5, "assignee_id": "shuvo", "module_id": 10, "color": "#ef4444"},
+    {"id": "GT-18", "title": "Bug Fixing & Prepared Statements Hardening", "phase": "Testing", "start_week": 11, "end_week": 13, "duration_weeks": 3, "progress_pct": 100, "status": "Completed", "priority": "High", "points": 5, "assignee_id": "monami", "module_id": 10, "color": "#ef4444"},
+    {"id": "GT-19", "title": "Cross-Browser & Mobile UI Responsiveness Testing", "phase": "Testing", "start_week": 11, "end_week": 13, "duration_weeks": 3, "progress_pct": 100, "status": "Completed", "priority": "Medium", "points": 4, "assignee_id": "setu", "color": "#ef4444"},
+    {"id": "GT-20", "title": "SPM Thesis Documentation & User Manual", "phase": "Testing", "start_week": 12, "end_week": 14, "duration_weeks": 3, "progress_pct": 100, "status": "Completed", "priority": "Medium", "points": 5, "assignee_id": "setu", "color": "#ef4444"},
+
+    # Phase 6: Deployment & Maintenance
+    {"id": "GT-21", "title": "Hospital Staging Deployment & UAT Sign-off", "phase": "Deployment", "start_week": 14, "end_week": 15, "duration_weeks": 2, "progress_pct": 100, "status": "Completed", "priority": "Urgent", "points": 5, "assignee_id": "monami", "module_id": 8, "color": "#10b981"},
+    {"id": "GT-22", "title": "Production Maintenance & Database Monitoring Setup", "phase": "Deployment", "start_week": 15, "end_week": 16, "duration_weeks": 2, "progress_pct": 100, "status": "Completed", "priority": "Medium", "points": 5, "assignee_id": "shuvo", "color": "#10b981"},
+    {"id": "GT-23", "title": "Academic Project Defense & Final Handover", "phase": "Deployment", "start_week": 15, "end_week": 16, "duration_weeks": 2, "progress_pct": 100, "status": "Completed", "priority": "Urgent", "points": 5, "assignee_id": "shuvo", "color": "#10b981"},
 ]
 
 # EXACT 7 MILESTONES FOR RAKTSEVA (16 WEEKS)
@@ -83,9 +100,9 @@ RAKTSEVA_MILESTONES = [
     {"id": 2, "week": 5, "title": "System Architecture, UML Diagrams & 7-Table ER Approved", "status": "Completed", "completed": True},
     {"id": 3, "week": 9, "title": "Core Donor Registration & Blood Search Modules Completed", "status": "Completed", "completed": True},
     {"id": 4, "week": 12, "title": "System Testing, OWASP Security Audit & Bug Fixing Cleared", "status": "Completed", "completed": True},
-    {"id": 5, "week": 14, "title": "Comprehensive SPM Documentation & User Manual Completed", "status": "In Progress", "completed": False},
-    {"id": 6, "week": 15, "title": "Parul Sevashram Hospital Staging Server Setup & UAT Sign-off", "status": "In Progress", "completed": False},
-    {"id": 7, "week": 16, "title": "Final University Academic Project Defense & Faculty Evaluation", "status": "Upcoming", "completed": False}
+    {"id": 5, "week": 14, "title": "Comprehensive SPM Documentation & User Manual Completed", "status": "Completed", "completed": True},
+    {"id": 6, "week": 15, "title": "Parul Sevashram Hospital Staging Server Setup & UAT Sign-off", "status": "Completed", "completed": True},
+    {"id": 7, "week": 16, "title": "Final University Academic Project Defense & Faculty Evaluation", "status": "Completed", "completed": True}
 ]
 
 # EXACT 10 MAJOR MODULES OF RAKTSEVA BLOOD BANK SYSTEM (FROM SRS)
@@ -160,9 +177,9 @@ def seed_database(db: Session, force_refresh: bool = False):
     Populates database with complete RaktSeva project data.
     If force_refresh is True or data is incomplete, safely refreshes all tables.
     """
-    # Check if refresh is needed
     existing_contribs = db.query(Contribution).count()
-    if force_refresh or existing_contribs < 20:
+    existing_tasks = db.query(GanttTask).count()
+    if force_refresh or existing_contribs < 20 or existing_tasks < 20:
         # Delete existing data in reverse dependency order
         db.query(Contribution).delete()
         db.query(GanttTask).delete()

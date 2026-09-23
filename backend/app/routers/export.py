@@ -1,6 +1,6 @@
 import csv
 import io
-from datetime import datetime
+from datetime import datetime, timezone
 from fastapi import APIRouter, Depends, Response
 from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
@@ -126,7 +126,7 @@ def export_excel(db: Session = Depends(get_db)):
         summary_data=summary_data
     )
 
-    filename = f"RaktSeva_BloodBank_SPM_GanttReport_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}.xlsx"
+    filename = f"RaktSeva_BloodBank_SPM_GanttReport_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}.xlsx"
     return StreamingResponse(
         excel_stream,
         media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -140,13 +140,13 @@ def export_csv(db: Session = Depends(get_db)):
     
     output = io.StringIO()
     writer = csv.writer(output)
-    writer.writerow(["Task ID", "Task Name", "Phase", "Start Week", "End Week", "Duration (Weeks)", "Progress %", "Status", "Assignee", "Points"])
+    writer.writerow(["Task ID", "Task Name", "Phase", "Start Week", "End Week", "Duration (Weeks)", "Progress %", "Status", "Member ID", "Points"])
 
     for t in tasks:
         writer.writerow([t.id, t.title, t.phase, f"W{t.start_week}", f"W{t.end_week}", t.duration_weeks, f"{t.progress_pct}%", t.status, t.assignee_id or "Unassigned", t.points])
 
     output.seek(0)
-    filename = f"GrandPulse_Gantt_Schedule_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}.csv"
+    filename = f"GrandPulse_Gantt_Schedule_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}.csv"
     return Response(
         content=output.getvalue(),
         media_type="text/csv",
