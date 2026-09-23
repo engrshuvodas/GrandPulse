@@ -143,5 +143,7 @@ export const api = {
 
   // Export URLs
   getExcelExportUrl: () => `${API_BASE}/export/excel`,
-  getCsvExportUrl: () => `${API_BASE}/export/csv`,
+  getCsvExportUrl:   () => `${API_BASE}/export/csv`,
+  getPdfExportUrl:   () => `${API_BASE}/export/pdf`,
 };
+

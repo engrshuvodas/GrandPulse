@@ -97,6 +97,10 @@ export default function GanttChartMatrix() {
     window.open(api.getExcelExportUrl(), '_blank');
   };
 
+  const handleDownloadPdf = () => {
+    window.open(api.getPdfExportUrl(), '_blank');
+  };
+
   // Quick stats
   const completedCount = ganttTasks.filter((t) => t.progress_pct === 100 || t.status === 'Completed').length;
   const inProgressCount = ganttTasks.filter((t) => t.progress_pct > 0 && t.progress_pct < 100).length;
@@ -171,15 +175,28 @@ export default function GanttChartMatrix() {
             <span>Presentation View</span>
           </button>
 
-          {/* Download Excel */}
-          <button
-            onClick={handleDownloadExcel}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary text-on-primary hover:bg-primary/90 text-xs font-bold transition-all shadow-md active:scale-95"
-            title="Download full 5-sheet styled Excel workbook"
-          >
-            <span className="material-symbols-outlined text-[18px]">file_download</span>
-            <span>Export Excel</span>
-          </button>
+          {/* Download Buttons: Excel + PDF */}
+          <div className="flex items-center gap-1.5">
+            {/* Excel */}
+            <button
+              onClick={handleDownloadExcel}
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-l-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-md active:scale-95 border border-emerald-700"
+              title="Download full 5-sheet styled Excel workbook (.xlsx)"
+            >
+              <span className="material-symbols-outlined text-[18px]">table_view</span>
+              <span>Excel</span>
+            </button>
+            {/* PDF */}
+            <button
+              onClick={handleDownloadPdf}
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-r-xl bg-primary hover:bg-primary/85 text-on-primary text-xs font-bold transition-all shadow-md active:scale-95 border border-primary/80"
+              title="Download A4 Landscape PDF report for printing"
+            >
+              <span className="material-symbols-outlined text-[18px]">picture_as_pdf</span>
+              <span>PDF</span>
+            </button>
+          </div>
+
         </div>
       </div>
 
