@@ -107,15 +107,18 @@ def export_excel(db: Session = Depends(get_db)):
     ]
 
     completed_tasks = len([t for t in gantt_tasks if t.status == "Completed"])
+    avg_progress = round(
+        sum(t.progress_pct for t in gantt_tasks) / len(gantt_tasks), 1
+    ) if gantt_tasks else 0.0
     summary_data = {
         "active_members": len(members),
         "total_tasks": len(gantt_tasks),
         "completed_tasks": completed_tasks,
-        "completed_ratio": round((completed_tasks / len(gantt_tasks) * 100), 1) if gantt_tasks else 0.0,
+        "completed_ratio": avg_progress,
         "inprogress_tasks": len([t for t in gantt_tasks if t.status == "In Progress"]),
         "total_points": total_score,
         "total_hours": round(sum(c.hours for c in contributions), 1),
-        "sprint_velocity": f"{round((completed_tasks / len(gantt_tasks) * 100), 1)}%" if gantt_tasks else "0%"
+        "sprint_velocity": f"{avg_progress}%"
     }
 
     excel_stream = generate_grandpulse_excel(
@@ -211,15 +214,18 @@ def export_pdf(db: Session = Depends(get_db)):
         for mod in modules
     ]
     completed_tasks = len([t for t in gantt_tasks if t.status == "Completed"])
+    avg_progress_pdf = round(
+        sum(t.progress_pct for t in gantt_tasks) / len(gantt_tasks), 1
+    ) if gantt_tasks else 0.0
     summary_data = {
         "active_members": len(members),
         "total_tasks":    len(gantt_tasks),
         "completed_tasks":completed_tasks,
-        "completed_ratio":round((completed_tasks / len(gantt_tasks) * 100), 1) if gantt_tasks else 0.0,
+        "completed_ratio":avg_progress_pdf,
         "inprogress_tasks":len([t for t in gantt_tasks if t.status == "In Progress"]),
         "total_points":   total_score,
         "total_hours":    round(sum(c.hours for c in contributions), 1),
-        "sprint_velocity":f"{round((completed_tasks / len(gantt_tasks) * 100), 1)}%" if gantt_tasks else "0%"
+        "sprint_velocity":f"{avg_progress_pdf}%"
     }
 
     pdf_stream = generate_raktseva_pdf(

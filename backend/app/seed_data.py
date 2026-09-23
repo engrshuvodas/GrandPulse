@@ -86,7 +86,7 @@ RAKTSEVA_TASKS = [
     {"id": "GT-17", "title": "Integration Testing & SQLi Security Audit", "phase": "Testing", "start_week": 10, "end_week": 12, "duration_weeks": 3, "progress_pct": 100, "status": "Completed", "priority": "Urgent", "points": 5, "assignee_id": "shuvo", "module_id": 10, "color": "#ef4444"},
     {"id": "GT-18", "title": "Bug Fixing & Prepared Statements Hardening", "phase": "Testing", "start_week": 11, "end_week": 13, "duration_weeks": 3, "progress_pct": 100, "status": "Completed", "priority": "High", "points": 5, "assignee_id": "monami", "module_id": 10, "color": "#ef4444"},
     {"id": "GT-19", "title": "Cross-Browser & Mobile UI Responsiveness Testing", "phase": "Testing", "start_week": 11, "end_week": 13, "duration_weeks": 3, "progress_pct": 100, "status": "Completed", "priority": "Medium", "points": 4, "assignee_id": "setu", "color": "#ef4444"},
-    {"id": "GT-20", "title": "SPM Thesis Documentation & User Manual", "phase": "Testing", "start_week": 12, "end_week": 14, "duration_weeks": 3, "progress_pct": 100, "status": "Completed", "priority": "Medium", "points": 5, "assignee_id": "setu", "color": "#ef4444"},
+    {"id": "GT-20", "title": "SPM Thesis Documentation & User Manual", "phase": "Testing", "start_week": 12, "end_week": 14, "duration_weeks": 3, "progress_pct": 98, "status": "In Progress", "priority": "Medium", "points": 5, "assignee_id": "setu", "color": "#ef4444"},
 
     # Phase 6: Deployment & Maintenance
     {"id": "GT-21", "title": "Hospital Staging Deployment & UAT Sign-off", "phase": "Deployment", "start_week": 14, "end_week": 15, "duration_weeks": 2, "progress_pct": 0, "status": "Pending", "priority": "Urgent", "points": 5, "assignee_id": "monami", "module_id": 8, "color": "#10b981"},
